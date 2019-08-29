@@ -8,5 +8,23 @@
 
 .ag-row-hover {
     /* putting in !important so it overrides the theme's styling as it hovers the row also */
-    background-color: #dfdfff !important;
+    background-color: #c2dbff !important;
+}
+
+.row-icon-hover img:hover {
+    background-color: rgba(32,33,36,0.059);
+    background: lightgray;
+    border: 7px solid lightgray;
+    border-radius: 50%;
+    opacity: 1;
+
+}
+
+.row-icon-hover img{
+    background-color: #c2dbff;
+    border: 7px solid #c2dbff;
+    border-radius: 50%;
+    margin-top: 1px;
+    opacity: 1;
+
 }

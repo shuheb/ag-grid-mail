@@ -36,7 +36,7 @@ var gridOptions = {
         //find which cell you are hoverin in, show button
         let renderer = params.api.getCellRendererInstances({
             rowNodes: [params.node],
-            columns: ['subject','description'],
+            columns: ['subject', 'description'],
         })[0];
 
         renderer.showButton();
@@ -45,7 +45,7 @@ var gridOptions = {
         //find which cell you are hoverin out, hide button
         let renderer = params.api.getCellRendererInstances({
             rowNodes: [params.node],
-            columns: ['subject','description'],
+            columns: ['subject', 'description'],
         })[0];
 
         renderer.hideButton();
@@ -59,8 +59,11 @@ HoverCellRenderer.prototype.init = function (params) {
 
     this.eGui = document.createElement('div');
     this.eGui.innerHTML =
-        params.value +
-        '<span class = "btn-simple" style="display: none; float:right;" ><button>Push Me</button></span>';
+        ` ${params.value} <span class = "btn-simple" style="display: none; float:right;">
+        <span class="row-icon-hover" style="margin:0 10px;"><img src="https://www.gstatic.com/images/icons/material/system/1x/archive_black_20dp.png"></span>
+        <span class="row-icon-hover" style="margin:0 10px;"><img src="https://www.gstatic.com/images/icons/material/system/1x/delete_black_20dp.png"></span>
+        <span class="row-icon-hover" style="margin:0 10px;" ><img src="https://www.gstatic.com/images/icons/material/system/1x/drafts_black_20dp.png"></span>
+        <span class="row-icon-hover" style="margin:0 10px;"><img src="https://www.gstatic.com/images/icons/material/system/1x/watch_later_black_20dp.png"></span>`;
     this.eButton = this.eGui.querySelector('.btn-simple');
 
     this.eventListener = function () {
