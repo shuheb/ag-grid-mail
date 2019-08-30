@@ -1,6 +1,6 @@
 var columnDefs = [
     {
-        field: "subject",
+        field: "from",
         checkboxSelection: true,
         width: 240,
         cellStyle: {'font-weight': 'bold'},
@@ -9,17 +9,14 @@ var columnDefs = [
         //     return icon + params.value;
         // }
     },
-    {field: "description", width: 1092, cellRenderer: 'hoverCellRenderer', cellStyle: {'font-weight': 'bold'}},
+    {field: "subject", width: 1092, cellRenderer: 'hoverCellRenderer', cellStyle: {'font-weight': 'bold'}},
 ];
-const selectedCell = {
-    rowIndex: null,
-    column: null,
-};
+
 var rowData = [
-    {subject: 'xxxx', description: 'xxxxxxxxxxxx', data: 'kjkljmkofo jgoidjf goidfjgiodfjgoi', read: true},
-    {subject: 'yyyy', description: 'yyyyyyyyyyyy'},
-    {subject: 'wwww', description: 'wwwwwwwwwwww'},
-    {subject: 'zzzz', description: 'zzzzzzzzzzzz'}
+    {from: 'xxxx', subject: 'xxxxxxxxxxxx', emailData: 'kjkljmkofo jgoidjf goidfjgiodfjgoi', read: false},
+    {from: 'yyyy', subject: 'yyyyyyyyyyyy', emailData: 'knsfkjdsnfkanjd', read: false},
+    {from: 'wwww', subject: 'wwwwwwwwwwww', emailData: 'vfjkndlvjksfbdiln lsdknfsdfoiudshufidsnfklj sdnklsdb fisdkflsd', read: false},
+    {from: 'zzzz', subject: 'zzzzzzzzzzzz', emailData: 'rewoiurheoiuthrouit hoiutrehg ieufhiouewghroiqwu das', read: true}
 ];
 var gridOptions = {
     columnDefs: columnDefs,
@@ -29,28 +26,44 @@ var gridOptions = {
         sortable: true,
         resizable: true,
     },
+    rowSelection: 'single',
     components: {
         hoverCellRenderer: HoverCellRenderer,
     },
-    onCellMouseOver: function (params) {
-        //find which cell you are hoverin in, show button
-        let renderer = params.api.getCellRendererInstances({
-            rowNodes: [params.node],
-            columns: ['subject', 'description'],
-        })[0];
-
-        renderer.showButton();
-    },
-    onCellMouseOut: function (params) {
-        //find which cell you are hoverin out, hide button
-        let renderer = params.api.getCellRendererInstances({
-            rowNodes: [params.node],
-            columns: ['subject', 'description'],
-        })[0];
-
-        renderer.hideButton();
-    },
+    onCellMouseOver: onCellMouseOver,
+    onCellMouseOut: onCellMouseOut,
+    onRowSelected: onRowSelected,
 };
+
+function onCellMouseOver(event) {
+    //find which cell you are hoverin in, show button
+    let renderer = event.api.getCellRendererInstances({
+        rowNodes: [event.node],
+        columns: ['from', 'subject'],
+    })[0];
+
+    renderer.showButton();
+}
+
+function onCellMouseOut(event) {
+    //find which cell you are hoverin out, hide button
+    let renderer = event.api.getCellRendererInstances({
+        rowNodes: [event.node],
+        columns: ['from', 'subject'],
+    })[0];
+
+    renderer.hideButton();
+}
+
+function onRowSelected(event) {
+    let from = event.data.from;
+    let subject = event.data.subject;
+    let emailData = event.data.emailData;
+    event.data.read = true;
+    document.getElementById('emailFrom').innerText = 'From: '+from;
+    document.getElementById('emailSubject').innerText = 'RE: '+subject;
+    document.getElementById('emailData').innerText = emailData;
+}
 
 function HoverCellRenderer() {
 }
