@@ -15,13 +15,22 @@
 </head>
 
 <body>
-<h1>ag-Mail</h1>
-<div id="myGrid" class="ag-theme-material" style="height: 50%;"></div>
-<div id="myEmail" style="height: 50%;">
-    <h1>Email View</h1>
-        <h2 id="emailFrom" style="padding: 5px">From: </h2>
-        <h2 id="emailSubject" style="padding: 5px">email subject</h2>
-    <p id="emailData" style="padding: 5px">data</p>
+<div style="display: flex; height: 100%; width: 100%; align-items: center; justify-content: center; flex-direction: column">
+    <div style="height: 100%;width:900px; border: 2px solid black">
+        <div id="myGridContainer" style="height: 800px;width:100%; display: flex; flex-direction: column">
+            <div id="buttons" style="height: 30px">
+                <input type="image" selected = false src="https://www.gstatic.com/images/icons/material/system/1x/check_box_outline_blank_black_20dp.png" onclick="onSelectAll(this)">
+                <input type="text">
+            </div>
+            <div id="myGrid" class="ag-theme-material" style="height: 770px; width: 100%;"></div>
+        </div>
+        <div id="myEmail">
+            <h1>Email View</h1>
+            <h2 id="emailFrom" style="padding: 5px">From: </h2>
+            <h2 id="emailSubject" style="padding: 5px">email subject</h2>
+            <p id="emailData" style="padding: 5px">data</p>
+        </div>
+    </div>
 </div>
 <script src="main.js"></script>
 </body>

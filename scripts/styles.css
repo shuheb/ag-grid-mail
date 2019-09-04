@@ -11,20 +11,33 @@
     background-color: #c2dbff !important;
 }
 
+.ag-row {
+    background-color: rgba(242,245,245,0.8);
+}
+
+.row-selected {
+    background-color: #c2dbff !important;
+}
+
 .row-icon-hover img:hover {
-    background-color: rgba(32,33,36,0.059);
-    background: lightgray;
+    /*background-color: rgba(32, 33, 36, 0.059);*/
+    /*background: lightgray;*/
     border: 7px solid lightgray;
     border-radius: 50%;
     opacity: 1;
 
 }
 
-.row-icon-hover img{
+.row-icon-hover img {
     background-color: #c2dbff;
     border: 7px solid #c2dbff;
     border-radius: 50%;
     margin-top: 1px;
     opacity: 1;
 
+}
+
+.ag-theme-material .email-read {
+    font-weight: bold !important;
+    background-color: white;
 }
