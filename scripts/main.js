@@ -9,7 +9,7 @@ var columnDefs = [
         // }
     },
     {field: "subject", width: 1092, cellRenderer: 'hoverCellRenderer',},
-    {field: "emailData",hide : true},
+    {field: "emailData", hide: true},
 
 
 ];
@@ -95,15 +95,14 @@ function onRowClicked(event) {
 }
 
 function onSelectAll(event) {
-    if (!event.selected) {
-        event.selected = !event.selected;
-        event.src = "https://www.gstatic.com/images/icons/material/system/1x/check_box_black_20dp.png";
+    if (event.checked) {
         gridOptions.api.selectAll();
+        document.getElementById('selection').style.display = 'block';
+        document.getElementById('selection').innerText = 'All ' + gridOptions.api.getSelectedNodes().length + ' conversations on this page are selected';
         document.getElementById('myBulkOperations').style.display = 'block';
     } else {
-        event.selected = !event.selected;
-        event.src = "https://www.gstatic.com/images/icons/material/system/1x/check_box_outline_blank_black_20dp.png";
         gridOptions.api.deselectAll();
+        document.getElementById('selection').style.display = 'none';
         document.getElementById('myBulkOperations').style.display = 'none';
     }
     // url('https://www.gstatic.com/images/icons/material/system/1x/check_box_black_20dp.png')
@@ -112,6 +111,11 @@ function onSelectAll(event) {
 
 function onClickDeleteAll() {
     console.log('*** Delete All ***');
+
+    let selectedRowNodes = gridOptions.api.getSelectedNodes();
+
+    gridOptions.api.updateRowData({remove: selectedRowNodes});
+
 }
 
 function onClickArchiveAll() {
