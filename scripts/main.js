@@ -9,6 +9,9 @@ var columnDefs = [
         // }
     },
     {field: "subject", width: 1092, cellRenderer: 'hoverCellRenderer',},
+    {field: "emailData",hide : true},
+
+
 ];
 
 var gridOptions = {
@@ -96,13 +99,36 @@ function onSelectAll(event) {
         event.selected = !event.selected;
         event.src = "https://www.gstatic.com/images/icons/material/system/1x/check_box_black_20dp.png";
         gridOptions.api.selectAll();
+        document.getElementById('myBulkOperations').style.display = 'block';
     } else {
         event.selected = !event.selected;
         event.src = "https://www.gstatic.com/images/icons/material/system/1x/check_box_outline_blank_black_20dp.png";
         gridOptions.api.deselectAll();
+        document.getElementById('myBulkOperations').style.display = 'none';
     }
-    url('https://www.gstatic.com/images/icons/material/system/1x/check_box_black_20dp.png')
-    url('https://www.gstatic.com/images/icons/material/system/1x/check_box_outline_blank_black_20dp.png')
+    // url('https://www.gstatic.com/images/icons/material/system/1x/check_box_black_20dp.png')
+    // url('https://www.gstatic.com/images/icons/material/system/1x/check_box_outline_blank_black_20dp.png')
+}
+
+function onClickDeleteAll() {
+    console.log('*** Delete All ***');
+}
+
+function onClickArchiveAll() {
+    console.log('*** Archive All ***');
+}
+
+function onClickMarkAll() {
+    console.log('*** Mark All ***');
+}
+
+function onClickSnoozeAll() {
+    console.log('*** Snooze All ***');
+}
+
+
+function onFilterTextBoxChanged() {
+    gridOptions.api.setQuickFilter(document.getElementById('filter-text-box').value);
 }
 
 function HoverCellRenderer() {
