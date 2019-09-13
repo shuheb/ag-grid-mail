@@ -19,7 +19,7 @@ var gridOptions = {
     rowHeight: 40,
     defaultColDef: {
         sortable: true,
-        resizable: true,
+        resizable: true
     },
     rowSelection: 'multiple',
     suppressRowClickSelection: true,
@@ -34,7 +34,7 @@ var gridOptions = {
     },
     rowClassRules: {
         'email-read': function (params) {
-            return !params.data.read;
+            return params.data.read;
         },
         'row-selected': function (params) {
             return params.node.selected;
@@ -140,6 +140,8 @@ function HoverCellRenderer() {
 
 HoverCellRenderer.prototype.init = function (params) {
 
+    this.params = params;
+
     this.eGui = document.createElement('div');
     this.eGui.innerHTML = `
 <div style="display: flex; flex-direction: row">
@@ -177,16 +179,22 @@ HoverCellRenderer.prototype.init = function (params) {
 
     });
 
-    this.eMarkButton.addEventListener('click', function (event) {
+    this.eMarkButton.addEventListener('click',  (event) => {
         console.log('*** Mark Button clicked ***');
-        console.log('params', params);
+        // console.log('params', params);
+
+        // console.log('Old Read: ',params.data.read)
+
+        console.log(this.params.data.read, 'this.params.data.read');
 
         let newData = {
-            ...params.data,
-            read: false
+            ...this.params.data,
+            read: !this.params.data.read
         };
 
-        params.node.setData(newData);
+        console.log('New Data: ',newData)
+        this.params.node.setData(newData);
+        this.params.api.refreshCells({nodes: [params.node], force: true})
     });
 
     this.eSnoozeButton.addEventListener('click', function (event) {
@@ -207,6 +215,9 @@ HoverCellRenderer.prototype.hideButton = function () {
     this.spanEl.style.display = 'none';
 };
 
+HoverCellRenderer.prototype.refresh = function (params) {
+    this.params = params;
+};
 
 // setup the grid after the page has finished loading
 document.addEventListener('DOMContentLoaded', function () {
