@@ -34,7 +34,7 @@ var gridOptions = {
     },
     rowClassRules: {
         'email-read': function (params) {
-            return params.data.read;
+            return !params.data.read;
         },
         'row-selected': function (params) {
             return params.node.selected;
@@ -43,6 +43,7 @@ var gridOptions = {
     onCellMouseOver: onCellMouseOver,
     onCellMouseOut: onCellMouseOut,
     onRowClicked: onRowClicked,
+    onRowSelected: onRowSelected,
     onFirstDataRendered: () => gridOptions.api.sizeColumnsToFit()
 };
 
@@ -70,11 +71,20 @@ function onCellMouseOut(event) {
     renderer.hideButton();
 }
 
+function onRowSelected(event) {
+    if(gridOptions.api.getSelectedNodes().length >= 2) {
+        showBulkOperations();
+    }
+    else {
+        hideBulkOperations();
+    }
+}
+
 function onRowClicked(event) {
 
     if (event.event.target.tagName === "IMG") {
         event.event.stopPropagation();
-        return
+        return;
     }
 
 
@@ -97,42 +107,58 @@ function onRowClicked(event) {
 function onSelectAll(event) {
     if (event.checked) {
         gridOptions.api.selectAll();
-        document.getElementById('selection').style.display = 'block';
-        document.getElementById('selection').innerText = 'All ' + gridOptions.api.getSelectedNodes().length + ' conversations on this page are selected';
-        document.getElementById('myBulkOperations').style.display = 'block';
+        showBulkOperations();
+
     } else {
         gridOptions.api.deselectAll();
-        document.getElementById('selection').style.display = 'none';
-        document.getElementById('myBulkOperations').style.display = 'none';
+        hideBulkOperations();
     }
     // url('https://www.gstatic.com/images/icons/material/system/1x/check_box_black_20dp.png')
     // url('https://www.gstatic.com/images/icons/material/system/1x/check_box_outline_blank_black_20dp.png')
 }
 
-function onClickDeleteAll() {
-    console.log('*** Delete All ***');
-
-    let selectedRowNodes = gridOptions.api.getSelectedNodes();
-
-    gridOptions.api.updateRowData({remove: selectedRowNodes});
-
+function showBulkOperations() {
+    //document.getElementById('selection').style.display = 'block';
+   //document.getElementById('selection').innerText = 'All ' + gridOptions.api.getSelectedNodes().length + ' conversations on this page are selected';
+    document.getElementById('myBulkOperations').style.display = 'block';
 }
 
-function onClickArchiveAll() {
-    console.log('*** Archive All ***');
+function hideBulkOperations() {
+    document.getElementById('selection').style.display = 'none';
+    document.getElementById('myBulkOperations').style.display = 'none';
+}
+
+function onClickDeleteAll() {
+    console.log('*** Delete All ***');
+    let selectedRowNodes = gridOptions.api.getSelectedNodes();
+    gridOptions.api.updateRowData({remove: selectedRowNodes});
 }
 
 function onClickMarkAll() {
     console.log('*** Mark All ***');
-}
 
-function onClickSnoozeAll() {
-    console.log('*** Snooze All ***');
-}
 
+    let rowNodesToUpdate = [];
+    let selectedRowNodes = gridOptions.api.getSelectedNodes();
+
+    gridOptions.api.forEachNode(function (rowNode) {
+        if (rowNode.isSelected()) {
+            let data = rowNode.data;
+            data.read = true;
+            rowNodesToUpdate.push(data);
+        }
+    })
+
+    gridOptions.api.updateRowData({update: rowNodesToUpdate});
+}
 
 function onFilterTextBoxChanged() {
     gridOptions.api.setQuickFilter(document.getElementById('filter-text-box').value);
+}
+
+
+function onBtGroupBySender() {
+    
 }
 
 function HoverCellRenderer() {
@@ -148,58 +174,38 @@ HoverCellRenderer.prototype.init = function (params) {
      <div style="overflow: hidden;"><span style="text-overflow: ellipsis; display: inline-block; overflow: hidden; font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif ;font-size: .875rem; letter-spacing: .2px">${params.value} - <span style="font-weight: normal; color: #5f6368;">${params.node.data.emailData}</span></span></div>
      <div class = "btns" style="width: 100%; text-align: right; display: none;">
 <!--        <span style="display: none; float:right;">-->
-        <span class="btn-archive row-icon-hover" style="margin:0 10px;"><img src="https://www.gstatic.com/images/icons/material/system/1x/archive_black_20dp.png"></span>
         <span class="btn-delete row-icon-hover" style="margin:0 10px;"><img src="https://www.gstatic.com/images/icons/material/system/1x/delete_black_20dp.png"></span>
-        <span class="btn-mark row-icon-hover" style="margin:0 10px;" ><img src="https://www.gstatic.com/images/icons/material/system/1x/drafts_black_20dp.png"></span>
-        <span class="btn-snooze row-icon-hover" style="margin:0 10px;"><img src="https://www.gstatic.com/images/icons/material/system/1x/watch_later_black_20dp.png"></span></span>
+        <span class="btn-mark row-icon-hover" style="margin:0 10px;" ><img src="https://www.gstatic.com/images/icons/material/system/1x/drafts_black_20dp.png"></span></span>
      </div>
 </div>`;
-    this.eArchiveButton = this.eGui.querySelector('.btn-archive');
     this.eDeleteButton = this.eGui.querySelector('.btn-delete');
     this.eMarkButton = this.eGui.querySelector('.btn-mark');
-    this.eSnoozeButton = this.eGui.querySelector('.btn-snooze');
-
-    this.eArchiveButton.addEventListener('click', function (event) {
-        console.log('*** Archive Button clicked ***');
-    });
 
     this.eDeleteButton.addEventListener('click', function (event) {
         console.log('*** Delete Button clicked ***', params.node);
-
         console.log('params', params);
-
         // let newData = [];
         // params.api.forEachNode (node=>{
         //     if (node === params.node) return;
         //     newData.push(node.data)
         // })
-
         params.api.updateRowData({remove: [params.node]});
-
-
     });
 
-    this.eMarkButton.addEventListener('click',  (event) => {
+    this.eMarkButton.addEventListener('click', (event) => {
         console.log('*** Mark Button clicked ***');
         // console.log('params', params);
-
         // console.log('Old Read: ',params.data.read)
-
         console.log(this.params.data.read, 'this.params.data.read');
-
         let newData = {
             ...this.params.data,
             read: !this.params.data.read
         };
-
-        console.log('New Data: ',newData)
+        console.log('New Data: ', newData)
         this.params.node.setData(newData);
         this.params.api.refreshCells({nodes: [params.node], force: true})
     });
 
-    this.eSnoozeButton.addEventListener('click', function (event) {
-        console.log('*** Snooze Button clicked ***');
-    });
 };
 
 HoverCellRenderer.prototype.getGui = function () {

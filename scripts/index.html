@@ -22,16 +22,14 @@
                 <input type="checkbox" onclick="onSelectAll(this)">
                 <span id="myBulkOperations" style="display: none">
                     <span style="margin:0 10px;"><img
-                            src="https://www.gstatic.com/images/icons/material/system/1x/archive_black_20dp.png" onclick="onClickArchiveAll()"></span>
-                    <span style="margin:0 10px;"><img
                             src="https://www.gstatic.com/images/icons/material/system/1x/delete_black_20dp.png" onclick="onClickDeleteAll()"></span>
                     <span style="margin:0 10px;"><img
                             src="https://www.gstatic.com/images/icons/material/system/1x/drafts_black_20dp.png" onclick="onClickMarkAll()"></span>
-                    <span style="margin:0 10px;"><img
-                            src="https://www.gstatic.com/images/icons/material/system/1x/watch_later_black_20dp.png" onclick="onClickSnoozeAll()"></span>
                 </span>
                 <input type="search" id="filter-text-box" placeholder="Search mail" oninput="onFilterTextBoxChanged()"
                        style="margin-left: 24px;">
+
+                <button onclick="onBtGroupBySender"> Group by Sender</button>
 
             </div>
             <p id="selection" style="display: none"></p>
