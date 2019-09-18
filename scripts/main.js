@@ -1,29 +1,38 @@
-var columnDefs = [
+var columnDefsFactory = (rowGroupFrom) => [
     {
+        colId: 'from',
         field: "from",
         checkboxSelection: true,
+        rowGroup: rowGroupFrom,
         width: 400,
         // cellRenderer: function (params) {
         //     let icon = `<span><img src="https://www.gstatic.com/images/icons/material/system/1x/star_border_black_20dp.png" style="padding-right: 20px; position: relative; top: 5px""/></span>`
         //     return icon + params.value;
         // }
     },
-    {field: "subject", width: 1092, cellRenderer: 'hoverCellRenderer',},
-    {field: "emailData", hide: true},
+    {
+        colId: 'subject',
+        field: "subject",
+        width: 1092,
+        cellRendererSelector: (params) => params.node.group ? null : {component: 'hoverCellRenderer'},
+    },
+    {colId: 'emailData', field: "emailData", hide: true},
 
 
 ];
 
 var gridOptions = {
-    columnDefs: columnDefs,
+    columnDefs: columnDefsFactory(),
     rowHeight: 40,
     defaultColDef: {
         sortable: true,
         resizable: true
     },
+    groupSelectsChildren: true,
     rowSelection: 'multiple',
     suppressRowClickSelection: true,
     deltaRowDataMode: true,
+    deltaColumnMode: true,
     pagination: true,
     paginationAutoPageSize: true,
     getRowNodeId: function (data) {
@@ -34,53 +43,67 @@ var gridOptions = {
     },
     rowClassRules: {
         'email-read': function (params) {
-            return !params.data.read;
+            return params.node.group ? false : !params.data.read;
         },
         'row-selected': function (params) {
             return params.node.selected;
         }
     },
+    groupUseEntireRow: true,
     onCellMouseOver: onCellMouseOver,
     onCellMouseOut: onCellMouseOut,
     onRowClicked: onRowClicked,
     onRowSelected: onRowSelected,
-    onFirstDataRendered: () => gridOptions.api.sizeColumnsToFit()
+    onFirstDataRendered: () => gridOptions.api.sizeColumnsToFit(),
+    autoGroupColumnDef: {
+        checkboxSelection: true,
+    }
 };
 
 function processData(data) {
     gridOptions.api.setRowData(data);
 }
 
+var isDataGrouped = false;
+
 function onCellMouseOver(event) {
     //find which cell you are hoverin in, show button
+
     let renderer = event.api.getCellRendererInstances({
         rowNodes: [event.node],
         columns: ['from', 'subject'],
     })[0];
 
+    if (renderer == null) return;
     renderer.showButton();
+
 }
 
 function onCellMouseOut(event) {
     //find which cell you are hoverin out, hide button
+
     let renderer = event.api.getCellRendererInstances({
         rowNodes: [event.node],
         columns: ['from', 'subject'],
     })[0];
 
+    if (renderer == null) return;
+
     renderer.hideButton();
+
 }
 
 function onRowSelected(event) {
-    if(gridOptions.api.getSelectedNodes().length >= 2) {
+    if (gridOptions.api.getSelectedNodes().length >= 2) {
         showBulkOperations();
-    }
-    else {
+    } else {
         hideBulkOperations();
     }
 }
 
 function onRowClicked(event) {
+
+    if(!event.data) return;
 
     if (event.event.target.tagName === "IMG") {
         event.event.stopPropagation();
@@ -119,7 +142,7 @@ function onSelectAll(event) {
 
 function showBulkOperations() {
     //document.getElementById('selection').style.display = 'block';
-   //document.getElementById('selection').innerText = 'All ' + gridOptions.api.getSelectedNodes().length + ' conversations on this page are selected';
+    //document.getElementById('selection').innerText = 'All ' + gridOptions.api.getSelectedNodes().length + ' conversations on this page are selected';
     document.getElementById('myBulkOperations').style.display = 'block';
 }
 
@@ -134,6 +157,8 @@ function onClickDeleteAll() {
     gridOptions.api.updateRowData({remove: selectedRowNodes});
 }
 
+var allMarked = false;
+
 function onClickMarkAll() {
     console.log('*** Mark All ***');
 
@@ -144,10 +169,11 @@ function onClickMarkAll() {
     gridOptions.api.forEachNode(function (rowNode) {
         if (rowNode.isSelected()) {
             let data = rowNode.data;
-            data.read = true;
+            data.read = !allMarked;
             rowNodesToUpdate.push(data);
         }
-    })
+    });
+    allMarked = !allMarked;
 
     gridOptions.api.updateRowData({update: rowNodesToUpdate});
 }
@@ -158,7 +184,28 @@ function onFilterTextBoxChanged() {
 
 
 function onBtGroupBySender() {
-    
+    // console.log('old columns',columnDefs);
+
+    // let newColumns = columnDefs.map(function (col) {
+    //     return {...col}
+    // });
+
+    // columnDefs[0].colId = 'hi';
+
+    // console.log('newColumns',newColumns);
+    //
+    // console.log(newColumns === columnDefs);
+    if (!isDataGrouped) {
+        gridOptions.api.setColumnDefs(columnDefsFactory(true));
+        isDataGrouped = true;
+    } else {
+        gridOptions.api.setColumnDefs(columnDefsFactory(false));
+        isDataGrouped = false;
+    }
+
+    gridOptions.api.sizeColumnsToFit();
+
+
 }
 
 function HoverCellRenderer() {
@@ -201,7 +248,7 @@ HoverCellRenderer.prototype.init = function (params) {
             ...this.params.data,
             read: !this.params.data.read
         };
-        console.log('New Data: ', newData)
+        console.log('New Data: ', newData);
         this.params.node.setData(newData);
         this.params.api.refreshCells({nodes: [params.node], force: true})
     });
