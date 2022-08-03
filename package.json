@@ -1,26 +1,24 @@
 {
-  "name": "ag-mail",
+  "name": "ag-grid-mail",
   "version": "1.0.0",
   "description": "Creating an email grid using ag-grid",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack --mode development",
-    "prod": "webpack --mode production",
     "start": "webpack server --open --mode development"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shuheb/ag-mail.git"
+    "url": "git+https://github.com/shuheb/ag-grid-mail.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/shuheb/ag-mail/issues"
+    "url": "https://github.com/shuheb/ag-grid-mail/issues"
   },
-  "homepage": "https://github.com/shuheb/ag-mail#readme",
+  "homepage": "https://github.com/shuheb/ag-grid-mail#readme",
   "dependencies": {
-    "ag-grid-community": "^28.0.2"
+    "ag-grid-community": "^28.1.0"
   },
   "devDependencies": {
     "css-loader": "^6.7.1",
