@@ -1,9 +1,5 @@
-import { ICellRenderer, ICellRendererParams } from "ag-grid-community";
-
-class CustomCellRenderer implements ICellRenderer {
-    eGui: HTMLDivElement;
-    eFlag: string;
-    init(params: ICellRendererParams) {
+class CustomCellRenderer {
+    init(params) {
         this.eGui = document.createElement('div');
         this.eGui.innerHTML = '<span><img src="https://flags.fmcdn.net/data/flags/mini/gb.png" style="width: 20px; padding-right: 4px;"/>' +
             params.value +
@@ -15,7 +11,7 @@ class CustomCellRenderer implements ICellRenderer {
         return this.eGui;
     }
 
-    refresh(params: ICellRendererParams<any, any>): boolean {
+    refresh(params) {
         throw new Error("Method not implemented.");
     }
 }

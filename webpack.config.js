@@ -2,15 +2,15 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-    entry: './src/index.ts',
+    entry: './src/index.js',
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'AG Grid Blog',
+            title: 'AG Grid Mail Blog',
             template: 'index.html'
         })
     ],
     output: {
-        filename: 'main.js',
+        filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist'),
         clean: true
     },
@@ -20,14 +20,6 @@ module.exports = {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader']
             },
-            {
-                test: /\.ts?$/,
-                use: 'ts-loader',
-                exclude: /node_modules/,
-            },
         ]
     },
-    resolve: {
-        extensions: ['.ts', '.js'],
-      },
 };
