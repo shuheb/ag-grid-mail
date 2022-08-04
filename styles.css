@@ -1,43 +1,48 @@
-/*.custom-focus {*/
-/*    border: 1px solid #0091EA !important;*/
-/*    outline: initial !important;*/
-/*}*/
-.ag-header {
-    display: none
+* {
+    box-sizing: border-box;
 }
 
-.ag-row-hover {
-    /* putting in !important so it overrides the theme's styling as it hovers the row also */
-    background-color: #c2dbff !important;
+.ag-theme-material {
+    /* --ag-row-hover-color: transparent; */
 }
 
-.ag-row {
-    background-color: rgba(242,245,245,0.8);
+.renderer-container {
+    /* background-color: khaki; */
+    display: flex;
 }
 
-.row-selected {
-    background-color: #c2dbff !important;
+.action-container {
+    display: flex;
+    flex-direction: row;
+    padding: 0px 16px;
+    justify-content: space-around;
+    /* justify-content: center; */
+    align-items: center;
+    /* background-color: violet; */
+    margin-left: auto;
 }
 
-.row-icon-hover img:hover {
-    /*background-color: rgba(32, 33, 36, 0.059);*/
-    /*background: lightgray;*/
-    border: 7px solid lightgray;
-    border-radius: 50%;
-    opacity: 1;
+.ag-theme-material .ag-row-hover {
+    box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 1px 2px 0 rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15) !important;
+    z-index: 2;
+}
+
+.grid-view {
+    background-color: khaki;
+    height: 50vh;
+}
+
+.mail-view {
+    height: 50vh;
+    background-color: violet;
 
 }
 
-.row-icon-hover img {
-    background-color: #c2dbff;
-    border: 7px solid #c2dbff;
-    border-radius: 50%;
-    margin-top: 1px;
-    opacity: 1;
-
+.mail-view,
+.grid-view {
+    padding: 16px;
 }
 
-.ag-theme-material .email-read {
-    font-weight: bold !important;
-    background-color: white;
+#myMail {
+    border: 2px solid black;
 }
