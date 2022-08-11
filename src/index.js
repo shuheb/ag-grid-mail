@@ -13,8 +13,8 @@ const dialog = new MDCDialog(document.querySelector('.mdc-dialog'));
 
 const fetchData = async () => {
     try {
-        const response = await fetch('https://dev.to/feed/ag-grid');
-        // const response = await fetch('https://blog.ag-grid.com/rss/');
+        // const response = await fetch('https://dev.to/feed/ag-grid');
+        const response = await fetch('https://blog.ag-grid.com/rss/');
         const text = await response.text();
         const data = await new window.DOMParser().parseFromString(text, 'text/xml');
         const items = [];
