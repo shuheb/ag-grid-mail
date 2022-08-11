@@ -2,47 +2,156 @@
     box-sizing: border-box;
 }
 
+@media (min-width: 1080px) {
+    .mdc-dialog .mdc-dialog__surface {
+        max-width: 1080px;
+    }
+}
+
+body {
+    margin: 0px;
+}
+
+.grid-container {
+    background-color: #eaf1fb;
+    padding: 32px 32px 0px 32px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+
+#myGrid {
+    height: 750px;
+    width: 100%;
+}
+
+
+.header-buttons {
+    display: flex;
+    width: 94%;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-buttons>div:first-child {
+    padding-left: 32px;
+}
+
+.header-buttons>div:last-child {
+    margin-left: auto;
+    display: flex;
+    gap: 32px;
+    justify-content: flex-end;
+}
+
+.mdc-text-field {
+    height: 32px;
+}
+
+.mdc-floating-label--float-above {
+    transform: translateY(-18.75px) translateX(-28px) scale(0.75) !important;
+}
+
+.mdc-floating-label {
+    font-size: 16px;
+}
+
+
+.grid-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 48px;
+}
+
 .ag-theme-material {
-    /* --ag-row-hover-color: transparent; */
+    --ag-font-size: 14px;
+    --ag-font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+    --ag-selected-row-background-color: rgb(194, 219, 255, 0.4);
+    --ag-material-accent-color: black;
+}
+
+.text-description {
+    color: #5f6368;
+    font-weight: normal;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.date-label {
+    width: 45px;
+    margin-left: auto;
+}
+
+.inactive {
+    display: none;
 }
 
 .renderer-container {
-    /* background-color: khaki; */
     display: flex;
+    gap: 6px;
+}
+
+.text-container {
+    letter-spacing: .2px
 }
 
 .action-container {
     display: flex;
     flex-direction: row;
-    padding: 0px 16px;
+    /* padding: 0px 16px; */
     justify-content: space-around;
-    /* justify-content: center; */
     align-items: center;
-    /* background-color: violet; */
     margin-left: auto;
+    gap: 8px;
+}
+
+.action-container>span {
+    padding: 0px 4px;
+}
+
+.action-container>span:hover {
+    opacity: 1;
+}
+
+.action-container>span:hover::before {
+    content: "";
+    position: absolute;
+    display: block;
+    background-color: rgba(32, 33, 36, 0.059);
+    opacity: 1;
+    transform: scale(1);
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    top: 3px
+}
+
+.action-container>span:first-child::before {
+    right: 60px;
+}
+
+.action-container>span:last-child::before {
+    right: 20px;
+}
+
+.tag-container>span {
+    background-color: #8F67FF;
+    color: white;
+    padding: 4px 6px;
+    border-radius: 4px;
+}
+
+.row-icon-hover {
+    background-color: #c2dbff;
+    border: 7px solid #c2dbff;
+    border-radius: 50%;
+    margin-top: 1px;
+    opacity: 1;
 }
 
 .ag-theme-material .ag-row-hover {
     box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 1px 2px 0 rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15) !important;
     z-index: 2;
-}
-
-.grid-view {
-    background-color: khaki;
-    height: 50vh;
-}
-
-.mail-view {
-    height: 50vh;
-    background-color: violet;
-
-}
-
-.mail-view,
-.grid-view {
-    padding: 16px;
-}
-
-#myMail {
-    border: 2px solid black;
 }
