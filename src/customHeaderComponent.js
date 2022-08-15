@@ -9,6 +9,16 @@ class CustomHeader {
               </div>
               <div class="customHeaderLabel">${this.params.displayName}</div>
           `;
+        this.eActionContainer = document.createElement('div');
+        this.eActionContainer.innerHTML = '<span data-action="delete" class="material-icons">delete</span><span data-action="unread" class="material-icons">markunread</span>';
+        this.eActionContainer.style = 'display:flex; justify-content:center;margin-left:auto; color:black; gap:16px;'
+        this.eActionContainer.style.display = 'none';
+        const children = this.eActionContainer.querySelectorAll('span');
+        children.forEach(child => {
+            child.addEventListener('click', this.onClicked.bind(this))
+        });
+
+        this.eGui.appendChild(this.eActionContainer)
 
         params.api.addEventListener('selectionChanged', this.onSelectedChanged.bind(this));
 
@@ -16,76 +26,47 @@ class CustomHeader {
     }
 
     onSelectedChanged(params) {
-        const rowCount = params.api.rowModel.rootNode.allChildrenCount;
         const selectedRowsCount = params.api.getSelectedRows().length;
-        const headerCheckbox = this.eGui.parentNode.parentNode.querySelector('.ag-checkbox > .ag-checked');
-
-        if (headerCheckbox) {
-            this.eActionContainer = document.createElement('div');
-            this.eActionContainer.innerHTML = '<span data-action="delete" class="material-icons">delete</span><span data-action="unread" class="material-icons">markunread</span>';
-            this.eActionContainer.style = 'display:flex; justify-content:center;margin-left:auto; color:black; gap:16px;'
-            const children = this.eActionContainer.querySelectorAll('span');
-            children.forEach(child => {
-                child.addEventListener('click', this.onClicked.bind(this))
-            });
-
-            this.eGui.appendChild(this.eActionContainer)
-        };
-
-        if (selectedRowsCount < rowCount) {
-            this.eGui.removeChild(this.eActionContainer)
+        if (selectedRowsCount > 1) {
+            this.eActionContainer.style.display = '';
+        } else {
+            this.eActionContainer.style.display = 'none';
         }
     }
 
     onClicked(ev) {
         const action = ev.currentTarget.dataset.action;
-        const headerCheckbox = this.eGui.parentNode.parentNode.querySelector('.ag-checkbox > .ag-checked');
-        const rowData = [];
-        this.params.api.forEachNode(({ data }) => {
-            data.read = !data.read;
-            rowData.push(data)
-        });
-        if (headerCheckbox && rowData.length > 0) {
-            switch (action) {
-                case 'read':
-                    this.eActionContainer.innerHTML = '<span data-action="delete" class="material-icons">delete</span><span data-action="unread" class="material-icons">markunread</span>'
-                    this.addEventListenerOnButtons(this.eActionContainer, 'click', this.onClicked.bind(this));
-                    this.params.api.applyTransaction({
-                        update: rowData
-                    });
-                    this.params.api.refreshCells({ columns: ['title'], force: true });
-                    break;
-                case 'unread':
-                    this.eActionContainer.innerHTML = '<span data-action="delete" class="material-icons">delete</span><span data-action="read" class="material-icons">drafts</span>'
-                    this.addEventListenerOnButtons(this.eActionContainer, 'click', this.onClicked.bind(this));
-                    this.params.api.applyTransaction({
-                        update: rowData
-                    });
-                    this.params.api.refreshCells({ columns: ['title'], force: true });
-                    break;
-                case 'delete':
-                    this.params.api.applyTransaction({
-                        remove: rowData
-                    })
-                    break;
-            }
+        const selectedRows = this.params.api.getSelectedRows().map((row) => ({ ...row, read: !row.read }));
+
+        switch (action) {
+            case 'read':
+                this.eActionContainer.innerHTML = '<span data-action="delete" class="material-icons">delete</span><span data-action="unread" class="material-icons">markunread</span>'
+                this.addEventListenerOnButtons(this.eActionContainer, 'click', this.onClicked.bind(this));
+                this.params.api.applyTransaction({ update: selectedRows });
+                this.params.api.refreshCells({ columns: ['title'], force: true });
+                break;
+            case 'unread':
+                this.eActionContainer.innerHTML = '<span data-action="delete" class="material-icons">delete</span><span data-action="read" class="material-icons">drafts</span>'
+                this.addEventListenerOnButtons(this.eActionContainer, 'click', this.onClicked.bind(this));
+                this.params.api.applyTransaction({ update: selectedRows });
+                this.params.api.refreshCells({ columns: ['title'], force: true });
+                break;
+            case 'delete':
+                this.params.api.applyTransaction({ remove: selectedRows });
+                break;
         }
     }
 
     addEventListenerOnButtons(element, type, listener) {
         const children = element.querySelectorAll('span');
-        children.forEach(child => {
-            child.addEventListener(type, listener)
-        })
+        children.forEach(child => child.addEventListener(type, listener));
     }
 
     getGui() {
         return this.eGui;
     }
 
-    destroy() {
-
-    }
+    destroy() { }
 }
 
 export default CustomHeader;
